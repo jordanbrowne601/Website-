@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KineticAI - AI Virtual Sports Coach</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header / Navigation -->
+        <header class="navbar">
+            <div class="logo-container">
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">Kinetic<span>AI</span></div>
+            </div>
+            
+            <div class="controls-group">
+                <!-- Sport Selector -->
+                <div class="selector-wrapper">
+                    <label for="sport-select">Sport:</label>
+                    <select id="sport-select" class="custom-select">
+                        <option value="basketball" selected>Basketball</option>
+                        <option value="volleyball">Volleyball</option>
+                        <option value="boxing">Boxing</option>
+                    </select>
+                </div>
+
+                <!-- Tier Selector -->
+                <div class="selector-wrapper">
+                    <label for="tier-select">Plan Tier:</label>
+                    <select id="tier-select" class="custom-select tier-badge">
+                        <option value="free">Free (Standard Speed)</option>
+                        <option value="pro" selected>Pro (Fast GPU)</option>
+                        <option value="elite">Elite (Real-time Stream)</option>
+                    </select>
+                </div>
+
+                <!-- Storage Gauge Meter -->
+                <div class="storage-meter-container">
+                    <div class="storage-info">
+                        <span class="storage-label">Cloud Storage</span>
+                        <span id="storage-text" class="storage-value">2.4 / 5.0 GB</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="storage-bar" class="progress-bar-fill" style="width: 48%;"></div>
+                    </div>
+                </div>
+
+                <!-- Auth / Profile Section -->
+                <div id="auth-section">
+                    <button id="open-auth-btn" class="btn btn-outline">Sign In</button>
+                    <div id="user-profile" class="user-profile hidden">
+                        <div id="user-avatar" class="user-avatar">JD</div>
+                        <div class="user-details">
+                            <span id="user-name-display" class="user-name">John Doe</span>
+                            <span id="user-tier-display" class="user-badge">Pro Subscriber</span>
+                        </div>
+                        <button id="logout-btn" class="btn-icon" title="Sign Out">🚪</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <main class="dashboard-grid">
+            <!-- Left Column: Video Feed & Skeleton Canvas Overlay -->
+            <section class="video-section card">
+                <div class="card-header">
+                    <h2>Biomechanical Video Analysis</h2>
+                    <div class="badge-status" id="latency-badge">Latency: ~25ms</div>
+                </div>
+                
+                <div class="video-container">
+                    <video id="player-video" loop muted playsinline poster="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=800&q=80">
+                        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <!-- Overlay Canvas for AI Pose Detection Keypoints -->
+                    <canvas id="skeleton-canvas"></canvas>
+
+                    <!-- Processing Overlay Loader -->
+                    <div id="processing-loader" class="processing-overlay hidden">
+                        <div class="spinner"></div>
+                        <p id="loader-text">Analyzing joint kinetic angles...</p>
+                        <span class="loader-sub" id="loader-sub">Estimated time: 3s (Pro Tier)</span>
+                    </div>
+                </div>
+
+                <div class="video-controls">
+                    <button id="play-btn" class="btn btn-primary">Play / Pause</button>
+                    <button id="analyze-btn" class="btn btn-accent">Run AI Motion Scan</button>
+                    
+                    <div class="file-upload-wrapper">
+                        <label for="clip-upload" class="btn btn-outline">Upload Clip</label>
+                        <input type="file" id="clip-upload" accept="video/*" hidden>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: AI Analysis Results & Skill Breakdown -->
+            <section class="analysis-section card">
+                <div class="card-header">
+                    <h2>Skill Breakdown & Performance</h2>
+                    <span class="sport-label-badge" id="current-sport-badge">Basketball</span>
+                </div>
+
+                <!-- Skill Score Gauge -->
+                <div class="score-card">
+                    <div class="gauge-container">
+                        <div class="gauge-circle" id="gauge-circle" style="background: conic-gradient(#00f2fe 78%, #1f293d 0deg);">
+                            <div class="gauge-inner">
+                                <span id="overall-score" class="score-value">78</span>
+                                <span class="score-unit">/ 100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="score-meta">
+                        <h3 id="skill-rating-title">Solid Execution</h3>
+                        <p id="skill-rating-desc">Good elbow alignment, but release angle is slightly off peak velocity.</p>
+                    </div>
+                </div>
+
+                <!-- Metrics breakdown sliders/bars -->
+                <div class="metrics-grid" id="metrics-container">
+                    <!-- Dynamic Metrics Rendered via JS -->
+                </div>
+
+                <!-- Flaws & Corrections List -->
+                <div class="feedback-box">
+                    <h3>Biomechanical Flaws Detected</h3>
+                    <ul id="flaws-list" class="flaws-list">
+                        <!-- Dynamic Flaws Rendered via JS -->
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Row: Youtube Drill Recommendations -->
+        <section class="recommendations-section card">
+            <div class="card-header">
+                <h2>Recommended YouTube Training Drills</h2>
+                <span class="subtext">Targeted exercises based on your diagnosed flaws</span>
+            </div>
+
+            <div class="video-grid" id="recommendations-grid">
+                <!-- Recommended YouTube video cards dynamically inserted here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button id="close-auth-modal" class="modal-close">&times;</button>
+            <div class="modal-header">
+                <h3 id="auth-modal-title">Sign In to KineticAI</h3>
+                <p>Access your sports biomechanics dashboard & uploaded clips</p>
+            </div>
+            <form id="auth-form" class="auth-form">
+                <div class="form-group" id="name-field-group" style="display: none;">
+                    <label for="auth-name">Full Name</label>
+                    <input type="text" id="auth-name" placeholder="John Doe" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="auth-email">Email Address</label>
+                    <input type="email" id="auth-email" required placeholder="athlete@example.com" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">Password</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••" class="form-input">
+                </div>
+                <button type="submit" id="auth-submit-btn" class="btn btn-accent btn-full">Sign In</button>
+            </form>
+            <div class="modal-footer">
+                <span id="auth-toggle-text">Don't have an account?</span>
+                <button id="auth-toggle-btn" class="btn-link">Create Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
